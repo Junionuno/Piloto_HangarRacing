@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hangar Racing | Reprogramação e Performance Automotiva</title>
+<meta name="description" content="Hangar Racing — reprogramação, dinamometria e manutenção completa para veículos premium e esportivos em Nova Lima - MG.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Saira+Condensed:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="icon" type="image/jpeg" href="logo_hangar.jpg">
+<style>
+  :root{
+    --white:#ffffff;
+    --off-white:#f5f4f1;
+    --graphite:#14161a;
+    --graphite-2:#1d2025;
+    --graphite-3:#2a2e35;
+    --orange:#e48231;
+    --orange-deep:#b8631e;
+    --orange-glow:rgba(228,130,49,.35);
+    --steel:#9297a1;
+    --ink:#181a1e;
+    --line:rgba(255,255,255,.09);
+    --line-dark:rgba(0,0,0,.08);
+    --display:"Saira Condensed", "Arial Narrow", sans-serif;
+    --body:"Inter", -apple-system, sans-serif;
+    --mono:"JetBrains Mono", "Courier New", monospace;
+    --ease:cubic-bezier(.16,.8,.28,1);
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--body);
+    background:var(--white);
+    color:var(--ink);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%; display:block;}
+  a{color:inherit; text-decoration:none;}
+  ul{list-style:none;}
+  button{font:inherit; cursor:pointer;}
+  h1,h2,h3{font-family:var(--display); font-weight:700; letter-spacing:.01em; line-height:1.05;}
+  .container{width:100%; max-width:1180px; margin:0 auto; padding:0 24px;}
+  section{position:relative;}
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:.72rem;
+    letter-spacing:.22em;
+    text-transform:uppercase;
+    color:var(--orange);
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:26px; height:2px;
+    background:var(--orange);
+    display:inline-block;
+  }
+  :focus-visible{outline:2px solid var(--orange); outline-offset:3px;}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:.001ms !important; transition-duration:.001ms !important;}
+  }
+
+  /* ---------- REVEAL ---------- */
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s var(--ease), transform .7s var(--ease);}
+  .reveal.in{opacity:1; transform:translateY(0);}
+  .reveal-stagger > *{opacity:0; transform:translateY(24px); transition:opacity .6s var(--ease), transform .6s var(--ease);}
+  .reveal-stagger.in > *{opacity:1; transform:translateY(0);}
+  .reveal-stagger.in > *:nth-child(1){transition-delay:.02s;}
+  .reveal-stagger.in > *:nth-child(2){transition-delay:.10s;}
+  .reveal-stagger.in > *:nth-child(3){transition-delay:.18s;}
+  .reveal-stagger.in > *:nth-child(4){transition-delay:.26s;}
+  .reveal-stagger.in > *:nth-child(5){transition-delay:.34s;}
+  .reveal-stagger.in > *:nth-child(6){transition-delay:.42s;}
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:fixed; top:0; left:0; width:100%; z-index:1000;
+    background:rgba(20,22,26,.72);
+    backdrop-filter:blur(14px) saturate(140%);
+    -webkit-backdrop-filter:blur(14px) saturate(140%);
+    border-bottom:1px solid rgba(255,255,255,.06);
+    transition:background .3s var(--ease), border-color .3s var(--ease), padding .3s var(--ease);
+  }
+  header.scrolled{background:rgba(20,22,26,.92); padding-block:0;}
+  .nav-wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+    transition:height .3s var(--ease);
+  }
+  header.scrolled .nav-wrap{height:64px;}
+  .logo{
+    font-family:var(--display); font-weight:700;
+    font-size:1.5rem; color:var(--white);
+    letter-spacing:.02em;
+    display:flex; align-items:center; gap:12px;
+  }
+  .logo span{color:var(--orange);}
+  .logo-img{
+    height:46px; width:46px; object-fit:cover;
+    border-radius:6px;
+    border:1px solid rgba(255,255,255,.1);
+    flex-shrink:0;
+  }
+  .logo small{
+    font-family:var(--mono); font-weight:400; font-size:.6rem;
+    color:var(--steel); letter-spacing:.2em; margin-left:0;
+    display:none;
+  }
+  nav.primary-nav{
+    position:fixed; inset:64px 0 0 0; top:76px;
+    background:var(--graphite-2);
+    display:flex; flex-direction:column;
+    padding:28px 24px;
+    gap:4px;
+    transform:translateX(100%);
+    transition:transform .4s var(--ease);
+    border-top:1px solid var(--line);
+  }
+  nav.primary-nav.open{transform:translateX(0);}
+  nav.primary-nav a{
+    color:var(--white); font-family:var(--display); font-size:1.3rem;
+    padding:14px 4px; border-bottom:1px solid var(--line);
+  }
+  .nav-actions{display:flex; align-items:center; gap:14px;}
+  .btn{
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    font-family:var(--body); font-weight:600; font-size:.88rem;
+    padding:13px 24px; border-radius:2px;
+    border:1px solid transparent;
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease);
+    white-space:nowrap;
+  }
+  .btn-primary{background:var(--orange); color:var(--graphite);}
+  .btn-primary:hover{background:var(--orange-deep); transform:translateY(-2px); box-shadow:0 10px 24px -8px var(--orange-glow);}
+  .btn-outline{border-color:rgba(255,255,255,.25); color:var(--white); background:transparent;}
+  .btn-outline:hover{border-color:var(--orange); color:var(--orange); transform:translateY(-2px);}
+  .btn-dark{background:var(--graphite); color:var(--white);}
+  .btn-dark:hover{background:var(--graphite-3); transform:translateY(-2px);}
+  .btn-sm{padding:10px 18px; font-size:.78rem;}
+  .wa-icon{width:16px; height:16px; flex-shrink:0;}
+
+  .burger{
+    width:40px; height:40px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px;
+    background:transparent; border:none;
+  }
+  .burger span{width:22px; height:2px; background:var(--white); transition:transform .3s var(--ease), opacity .3s var(--ease);}
+  .burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+  .burger.open span:nth-child(2){opacity:0;}
+  .burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+
+  @media (min-width:900px){
+    .logo small{display:inline;}
+    nav.primary-nav{
+      position:static; inset:auto; transform:none; flex-direction:row;
+      background:transparent; border:none; padding:0; gap:36px;
+    }
+    nav.primary-nav a{
+      border:none; font-family:var(--body); font-weight:500; font-size:.92rem;
+      color:var(--steel); padding:6px 0; position:relative;
+    }
+    nav.primary-nav a:hover{color:var(--white);}
+    nav.primary-nav a::after{
+      content:""; position:absolute; left:0; bottom:-3px; width:0; height:2px; background:var(--orange);
+      transition:width .3s var(--ease);
+    }
+    nav.primary-nav a:hover::after{width:100%;}
+    .burger{display:none;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex; align-items:center;
+    background:var(--graphite);
+    color:var(--white);
+    padding-top:96px; padding-bottom:64px;
+    position:relative; overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      repeating-linear-gradient(115deg, transparent 0 64px, rgba(255,255,255,.035) 64px 65px),
+      radial-gradient(60% 60% at 82% 20%, rgba(228,130,49,.18), transparent 70%);
+    pointer-events:none;
+  }
+  .hero-grid{
+    position:relative; z-index:2;
+    display:grid; gap:48px;
+    grid-template-columns:1fr;
+  }
+  @media (min-width:960px){
+    .hero-grid{grid-template-columns:1.1fr .9fr; align-items:center;}
+  }
+  .hero-eyebrow{
+    font-family:var(--mono); font-size:.75rem; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--orange); margin-bottom:22px; display:flex; align-items:center; gap:10px;
+  }
+  .hero-eyebrow::before{content:""; width:26px; height:2px; background:var(--orange);}
+  .hero h1{
+    font-size:clamp(2.6rem, 8vw, 4.6rem);
+    text-transform:uppercase;
+    margin-bottom:22px;
+  }
+  .hero h1 .hl{color:var(--orange);}
+  .hero p.lead{
+    font-size:1.08rem; color:#c7cad0; max-width:520px; margin-bottom:34px;
+  }
+  .hero-ctas{display:flex; flex-wrap:wrap; gap:14px;}
+  .hero-stats{
+    display:flex; gap:28px; margin-top:48px; flex-wrap:wrap;
+  }
+  .hero-stats div{border-left:2px solid var(--orange); padding-left:14px;}
+  .hero-stats strong{
+    display:block; font-family:var(--mono); font-size:1.5rem; color:var(--white);
+  }
+  .hero-stats span{font-size:.76rem; color:var(--steel); text-transform:uppercase; letter-spacing:.08em;}
+
+  /* Dyno readout panel */
+  .dyno-panel{
+    background:var(--graphite-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:22px 22px 8px;
+  }
+  .dyno-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-family:var(--mono); font-size:.7rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--steel); margin-bottom:10px;
+  }
+  .dyno-head .dot{width:7px; height:7px; border-radius:50%; background:var(--orange); display:inline-block; margin-right:8px; box-shadow:0 0 8px var(--orange-glow); animation:pulse 1.8s ease-in-out infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:.35;}}
+  .dyno-svg{width:100%; height:auto; display:block;}
+  .dyno-path{
+    fill:none; stroke:var(--orange); stroke-width:2.5;
+    stroke-linecap:round; stroke-linejoin:round;
+    stroke-dasharray:900; stroke-dashoffset:900;
+    transition:stroke-dashoffset 2.2s var(--ease);
+  }
+  .dyno-path2{
+    fill:none; stroke:#5b6470; stroke-width:2; stroke-dasharray:4 6;
+    stroke-linecap:round;
+    stroke-dasharray:900; stroke-dashoffset:900;
+    transition:stroke-dashoffset 2.2s var(--ease) .15s;
+  }
+  .hero.loaded .dyno-path{stroke-dashoffset:0;}
+  .hero.loaded .dyno-path2{stroke-dashoffset:0;}
+  .dyno-legend{display:flex; gap:18px; font-family:var(--mono); font-size:.68rem; color:var(--steel); padding:10px 0 4px; flex-wrap:wrap;}
+  .dyno-legend .lg{display:flex; align-items:center; gap:6px;}
+  .lg i{width:12px; height:2px; display:inline-block;}
+  .lg.power i{background:var(--orange);}
+  .lg.torque i{background:#5b6470;}
+
+  .scroll-cue{
+    position:absolute; bottom:26px; left:50%; transform:translateX(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:.62rem; letter-spacing:.2em; color:var(--steel);
+    z-index:2;
+  }
+  .scroll-cue .line{width:1px; height:32px; background:linear-gradient(var(--orange), transparent); animation:cue 1.8s ease-in-out infinite;}
+  @keyframes cue{0%{transform:scaleY(0); transform-origin:top;} 50%{transform:scaleY(1); transform-origin:top;} 51%{transform-origin:bottom;} 100%{transform:scaleY(0); transform-origin:bottom;}}
+
+  /* ---------- SOBRE ---------- */
+  .about{padding:110px 0; background:var(--white);}
+  .about-grid{display:grid; gap:52px; grid-template-columns:1fr;}
+  @media (min-width:900px){ .about-grid{grid-template-columns:1.15fr .85fr; gap:64px;} }
+  .about h2{font-size:clamp(2rem,4.4vw,2.7rem); text-transform:uppercase; margin-bottom:20px;}
+  .about p{color:#494e57; font-size:1.02rem; max-width:56ch;}
+  .about p + p{margin-top:16px;}
+
+  .spec-plate{
+    background:var(--graphite);
+    border-radius:4px;
+    padding:8px;
+  }
+  .spec-plate ul{padding:0;}
+  .spec-item{
+    display:flex; gap:16px; align-items:flex-start;
+    padding:20px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .spec-item:last-child{border-bottom:none;}
+  .spec-item .ic{
+    width:38px; height:38px; flex-shrink:0;
+    border:1px solid var(--orange); border-radius:3px;
+    display:flex; align-items:center; justify-content:center;
+    color:var(--orange);
+  }
+  .spec-item .ic svg{width:19px; height:19px;}
+  .spec-item h3{
+    font-family:var(--mono); font-weight:600; font-size:.86rem; color:var(--white);
+    text-transform:uppercase; letter-spacing:.05em; margin-bottom:4px;
+  }
+  .spec-item p{font-size:.85rem; color:var(--steel); margin:0;}
+
+  /* ---------- SERVICOS ---------- */
+  .services{padding:110px 0; background:var(--off-white);}
+  .services-head{max-width:640px; margin-bottom:56px;}
+  .services-head h2{font-size:clamp(2rem,4.4vw,2.7rem); text-transform:uppercase;}
+  .services-head p{color:#5b606a; margin-top:14px; font-size:1.02rem;}
+  .card-grid{
+    display:grid; gap:2px; background:var(--line-dark);
+    border:1px solid var(--line-dark);
+    grid-template-columns:1fr;
+  }
+  @media (min-width:640px){ .card-grid{grid-template-columns:1fr 1fr;} }
+  @media (min-width:1000px){ .card-grid{grid-template-columns:1fr 1fr 1fr;} }
+  .s-card{
+    background:var(--white);
+    padding:34px 28px;
+    transition:background .3s var(--ease), transform .3s var(--ease);
+    position:relative;
+  }
+  .s-card:hover{background:var(--ink); transform:translateY(-4px);}
+  .s-card .ic{
+    width:46px; height:46px; border-radius:3px;
+    background:rgba(228,130,49,.12);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--orange); margin-bottom:22px;
+    transition:background .3s var(--ease);
+  }
+  .s-card .ic svg{width:23px; height:23px;}
+  .s-card:hover .ic{background:var(--orange); color:var(--graphite);}
+  .s-card h3{font-family:var(--display); font-size:1.28rem; text-transform:uppercase; margin-bottom:10px; transition:color .3s var(--ease);}
+  .s-card:hover h3{color:var(--white);}
+  .s-card p{font-size:.9rem; color:#666b74; margin:0; transition:color .3s var(--ease);}
+  .s-card:hover p{color:#b7bac0;}
+  .s-card .tag{
+    position:absolute; top:26px; right:28px;
+    font-family:var(--mono); font-size:.66rem; color:#c7cacf; letter-spacing:.06em;
+  }
+  .s-card:hover .tag{color:#585d66;}
+
+  /* ---------- GALERIA ---------- */
+  .gallery{padding:110px 0; background:var(--white);}
+  .gallery-head{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; margin-bottom:44px; flex-wrap:wrap;}
+  .gallery-head h2{font-size:clamp(2rem,4.4vw,2.7rem); text-transform:uppercase;}
+  .g-grid{
+    display:grid; gap:14px;
+    grid-template-columns:repeat(2, 1fr);
+  }
+  @media (min-width:720px){ .g-grid{grid-template-columns:repeat(4, 1fr); grid-auto-rows:180px;} 
+    .g-grid .g-item:nth-child(1){grid-column:span 2; grid-row:span 2;}
+    .g-grid .g-item:nth-child(4){grid-column:span 2;}
+  }
+  .g-item{
+    position:relative; overflow:hidden; border-radius:3px;
+    aspect-ratio:1/1;
+    background:
+      linear-gradient(135deg, var(--graphite-2) 0%, var(--graphite) 55%, #0f1013 100%);
+  }
+  @media (min-width:720px){ .g-item{aspect-ratio:auto;} }
+  .g-item::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:repeating-linear-gradient(45deg, rgba(255,255,255,.045) 0 2px, transparent 2px 14px);
+  }
+  .g-item .g-label{
+    position:absolute; left:14px; bottom:14px;
+    font-family:var(--mono); font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--steel); display:flex; align-items:center; gap:8px;
+  }
+  .g-item .g-label svg{width:15px; height:15px; color:var(--orange);}
+  .g-item{transition:transform .5s var(--ease);}
+  .g-item:hover{transform:scale(1.02);}
+
+  /* ---------- LOCALIZACAO ---------- */
+  .location{padding:110px 0; background:var(--off-white);}
+  .loc-grid{display:grid; gap:2px; background:var(--line-dark); border:1px solid var(--line-dark); grid-template-columns:1fr;}
+  @media (min-width:900px){ .loc-grid{grid-template-columns:1.2fr .8fr;} }
+  .loc-map iframe{width:100%; height:100%; min-height:340px; border:0; display:block; filter:grayscale(.15) contrast(1.05);}
+  .loc-info{background:var(--graphite); color:var(--white); padding:40px 32px;}
+  .loc-info h3{font-family:var(--display); font-size:1.5rem; text-transform:uppercase; margin-bottom:18px;}
+  .loc-row{display:flex; gap:14px; margin-bottom:22px; align-items:flex-start;}
+  .loc-row .ic{color:var(--orange); flex-shrink:0; margin-top:2px;}
+  .loc-row .ic svg{width:18px; height:18px;}
+  .loc-row p{color:#c7cad0; font-size:.92rem; margin:0;}
+  .loc-row a{color:#c7cad0;}
+  .loc-row a:hover{color:var(--orange);}
+
+  .hours-table{width:100%; border-collapse:collapse; font-family:var(--mono); font-size:.82rem; margin-top:6px;}
+  .hours-table tr{border-bottom:1px solid var(--line);}
+  .hours-table tr:last-child{border-bottom:none;}
+  .hours-table td{padding:9px 0; color:var(--steel);}
+  .hours-table td:last-child{text-align:right; color:#d5d7db;}
+  .hours-table tr.today td{color:var(--orange);}
+  .hours-table tr.today td:first-child::before{content:"▸ "; }
+  .status-pill{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.06em; text-transform:uppercase;
+    margin-top:16px; padding:8px 14px; border:1px solid var(--line); border-radius:2px; color:var(--white);
+  }
+  .status-pill .dot{width:7px; height:7px; border-radius:50%; background:#4caf50;}
+  .status-pill.closed .dot{background:#d1495b;}
+
+  /* ---------- CTA FAIXA ---------- */
+  .cta-strip{
+    background:var(--orange); color:var(--graphite);
+    padding:56px 0;
+  }
+  .cta-strip .container{display:flex; flex-wrap:wrap; gap:24px; align-items:center; justify-content:space-between;}
+  .cta-strip h2{font-size:clamp(1.5rem,3.6vw,2.1rem); text-transform:uppercase; max-width:520px;}
+  .cta-strip .btn-dark:hover{background:var(--graphite-2);}
+
+  /* ---------- FOOTER ---------- */
+  footer{background:var(--graphite); color:var(--steel); padding:64px 0 28px;}
+  .foot-grid{display:grid; gap:40px; grid-template-columns:1fr; margin-bottom:48px;}
+  @media (min-width:800px){ .foot-grid{grid-template-columns:1.3fr 1fr 1fr;} }
+  .foot-logo{
+    display:flex; align-items:center; gap:12px;
+    font-family:var(--display); font-size:1.3rem; color:var(--white); margin-bottom:16px;
+  }
+  .foot-logo span{color:var(--orange);}
+  .foot-logo img{
+    height:42px; width:42px; object-fit:cover; border-radius:6px;
+    border:1px solid rgba(255,255,255,.1);
+  }
+  .foot-col p{font-size:.88rem; max-width:34ch;}
+  .foot-col h4{
+    font-family:var(--mono); font-size:.72rem; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--white); margin-bottom:16px;
+  }
+  .foot-col ul li{margin-bottom:10px; font-size:.9rem;}
+  .foot-col ul li a:hover{color:var(--orange);}
+  .foot-social{display:flex; gap:12px; margin-top:18px;}
+  .foot-social a{
+    width:38px; height:38px; border:1px solid var(--line); border-radius:50%;
+    display:flex; align-items:center; justify-content:center; color:var(--steel);
+    transition:border-color .25s var(--ease), color .25s var(--ease), transform .25s var(--ease);
+  }
+  .foot-social a:hover{border-color:var(--orange); color:var(--orange); transform:translateY(-3px);}
+  .foot-social svg{width:17px; height:17px;}
+  .foot-bottom{
+    border-top:1px solid var(--line); padding-top:24px;
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:space-between;
+    font-size:.78rem; font-family:var(--mono); color:#5b6067;
+  }
+
+  /* ---------- WHATSAPP FLOAT ---------- */
+  .wa-float{
+    position:fixed; right:20px; bottom:20px; z-index:900;
+    width:58px; height:58px; border-radius:50%;
+    background:#25d366; color:#fff;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 28px -6px rgba(0,0,0,.4);
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  .wa-float:hover{transform:translateY(-4px) scale(1.05); box-shadow:0 14px 32px -6px rgba(0,0,0,.5);}
+  .wa-float svg{width:28px; height:28px;}
+  .wa-float::before{
+    content:""; position:absolute; inset:0; border-radius:50%;
+    box-shadow:0 0 0 0 rgba(37,211,102,.55);
+    animation:wa-ring 2.4s ease-out infinite;
+  }
+  @keyframes wa-ring{
+    0%{box-shadow:0 0 0 0 rgba(37,211,102,.5);}
+    80%{box-shadow:0 0 0 18px rgba(37,211,102,0);}
+    100%{box-shadow:0 0 0 0 rgba(37,211,102,0);}
+  }
+</style>
+</head>
+<body>
+
+<header id="site-header">
+  <div class="container nav-wrap">
+    <a href="#top" class="logo"><img src="logo_hangar.jpg" alt="Hangar Racing" class="logo-img"><small>PERFORMANCE&nbsp;LAB</small></a>
+    <nav class="primary-nav" id="primary-nav">
+      <a href="#top" class="nav-link">Início</a>
+      <a href="#servicos" class="nav-link">Serviços</a>
+      <a href="#contato" class="nav-link">Contato</a>
+    </nav>
+    <div class="nav-actions">
+      <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-eyebrow">Reprogramação &amp; Performance</div>
+      <h1 class="reveal">TECNOLOGIA QUE<br>VIRA <span class="hl">POTÊNCIA</span> NA PISTA E NA RUA</h1>
+      <p class="lead reveal">Especializada em reprogramação e performance automotiva, a Hangar Racing entrega serviços completos para veículos premium e esportivos — do dinamômetro Servitec à Oficina Full Service, com equipe qualificada e certificada.</p>
+      <div class="hero-ctas reveal">
+        <a href="#servicos" class="btn btn-primary">Ver Serviços</a>
+        <a href="https://wa.me/553136940037?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20falar%20com%20a%20Hangar%20Racing." class="btn btn-outline">
+          <svg class="wa-icon" viewBox="0 0 32 32" fill="currentColor"><path d="M16.02 3C9.4 3 4 8.38 4 15c0 2.36.66 4.56 1.8 6.44L4 29l7.74-1.75A11.9 11.9 0 0 0 16.02 27C22.65 27 28 21.62 28 15S22.65 3 16.02 3zm0 21.8c-2 0-3.87-.58-5.44-1.58l-.39-.24-4.6 1.04 1.02-4.5-.26-.4A9.7 9.7 0 0 1 6.2 15c0-5.4 4.4-9.8 9.82-9.8 5.42 0 9.82 4.4 9.82 9.8 0 5.4-4.4 9.8-9.82 9.8zm5.4-7.34c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.24-.46-2.36-1.47-.87-.78-1.46-1.74-1.63-2.04-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.5s1.06 2.9 1.21 3.1c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z"/></svg>
+          Falar no WhatsApp
+        </a>
+      </div>
+      <div class="hero-stats reveal">
+        <div><strong>Servitec</strong><span>Dinamômetro</span></div>
+        <div><strong>Full&nbsp;Service</strong><span>Oficina completa</span></div>
+        <div><strong>Certificada</strong><span>Equipe técnica</span></div>
+      </div>
+    </div>
+
+    <div class="dyno-panel reveal">
+      <div class="dyno-head"><span><span class="dot"></span>DINAMÔMETRO SERVITEC — LEITURA AO VIVO</span><span>RPM x1000</span></div>
+      <svg class="dyno-svg" viewBox="0 0 360 180" preserveAspectRatio="none">
+        <line x1="0" y1="150" x2="360" y2="150" stroke="rgba(255,255,255,.08)"/>
+        <line x1="0" y1="105" x2="360" y2="105" stroke="rgba(255,255,255,.06)"/>
+        <line x1="0" y1="60" x2="360" y2="60" stroke="rgba(255,255,255,.06)"/>
+        <path class="dyno-path" d="M4,150 C60,140 90,120 120,95 C160,62 190,30 230,22 C270,16 310,28 356,55"/>
+        <path class="dyno-path2" d="M4,150 C50,148 100,142 140,120 C190,92 230,70 270,68 C305,66 330,80 356,100"/>
+      </svg>
+      <div class="dyno-legend">
+        <span class="lg power"><i></i>Potência</span>
+        <span class="lg torque"><i></i>Torque</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-cue"><span>ROLE</span><span class="line"></span></div>
+</section>
+
+<section class="about" id="sobre">
+  <div class="container about-grid">
+    <div class="reveal">
+      <div class="eyebrow">Quem somos</div>
+      <h2>Uma oficina pensada para quem exige o máximo do carro</h2>
+      <p>A Hangar Racing é especializada em reprogramação e performance automotiva, oferecendo serviços completos para veículos premium e esportivos. Contamos com dinamômetro Servitec, Oficina Full Service e equipe qualificada e certificada para garantir máxima eficiência e segurança em cada manutenção.</p>
+      <p>Nosso objetivo é proporcionar a melhor experiência para quem busca potência, tecnologia e cuidado com o carro — do primeiro diagnóstico ao ajuste fino de cada curva de potência.</p>
+      <a href="#contato" class="btn btn-dark" style="margin-top:28px;">Fale com a equipe</a>
+    </div>
+
+    <div class="spec-plate reveal">
+      <ul>
+        <li class="spec-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></div>
+          <div><h3>Dinamômetro Servitec</h3><p>Medição precisa de potência e torque para calibração real.</p></div>
+        </li>
+        <li class="spec-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14.7 6.3a4 4 0 0 1-5.4 5.4L4 17v3h3l5.3-5.3a4 4 0 0 1 5.4-5.4l-2.6 2.6-2-2 2.6-2.6z"/></svg></div>
+          <div><h3>Oficina Full Service</h3><p>Estrutura completa para manutenção, ajuste e revisão premium.</p></div>
+        </li>
+        <li class="spec-item">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg></div>
+          <div><h3>Equipe Certificada</h3><p>Profissionais qualificados, focados em segurança e eficiência.</p></div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="services" id="servicos">
+  <div class="container">
+    <div class="services-head reveal">
+      <div class="eyebrow">Serviços</div>
+      <h2>Tudo o que o seu carro precisa, num só lugar</h2>
+      <p>Da reprogramação de ECU à revisão completa, cada serviço é executado com equipamento de precisão e checagem dupla de qualidade.</p>
+    </div>
+
+    <div class="card-grid reveal-stagger">
+      <div class="s-card">
+        <span class="tag">01</span>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg></div>
+        <h3>Reprogramação de ECU</h3>
+        <p>Otimização de mapas de injeção e ignição para ganho real de potência e resposta.</p>
+      </div>
+      <div class="s-card">
+        <span class="tag">02</span>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg></div>
+        <h3>Dinamometria</h3>
+        <p>Testes de potência e torque no dinamômetro Servitec, com relatório detalhado.</p>
+      </div>
+      <div class="s-card">
+        <span class="tag">03</span>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16M8 6l-4 6 4 6M16 6l4 6-4 6"/></svg></div>
+        <h3>Revisão &amp; Manutenção</h3>
+        <p>Manutenção preventiva e corretiva completa em ambiente Full Service.</p>
+      </div>
+      <div class="s-card">
+        <span class="tag">04</span>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="7" cy="17" r="2.4"/><circle cx="17" cy="17" r="2.4"/><path d="M9.4 17h5.2M6 14l2-7h6l3 7"/></svg></div>
+        <h3>Freios &amp; Suspensão</h3>
+        <p>Ajuste e upgrade de freios e suspensão esportiva para máxima resposta.</p>
+      </div>
+      <div class="s-card">
+        <span class="tag">05</span>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h6l2-3h6l3 3-3 3h-6l-2-3H3z"/></svg></div>
+        <h3>Escapamento Esportivo</h3>
+        <p>Sistemas de escape que unem ganho de fluxo e sonoridade sob medida.</p>
+      </div>
+      <div class="s-card">
+        <span class="tag">06</span>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 4v3M12 17v3M4 12h3M17 12h3M6 6l2 2M16 16l2 2M18 6l-2 2M8 16l-2 2"/><circle cx="12" cy="12" r="3"/></svg></div>
+        <h3>Diagnóstico Eletrônico</h3>
+        <p>Leitura completa de módulos e sensores para diagnóstico preciso.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="galeria">
+  <div class="container">
+    <div class="gallery-head reveal">
+      <div>
+        <div class="eyebrow">Galeria</div>
+        <h2>Dentro do Hangar</h2>
+      </div>
+      <p style="color:#5b606a; max-width:40ch;">Um vislumbre da oficina, do dinamômetro e dos carros que já passaram por aqui.</p>
+    </div>
+    <div class="g-grid reveal-stagger">
+      <div class="g-item"><div class="g-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="7" width="18" height="12" rx="2"/><circle cx="12" cy="13" r="3.2"/><path d="M8 7l1.5-3h5L16 7"/></svg>Oficina</div></div>
+      <div class="g-item"><div class="g-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="8.5"/><path d="M12 8v4l3 2"/></svg>Dinamômetro</div></div>
+      <div class="g-item"><div class="g-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 13l2-5h14l2 5M5 13h14v5H5z"/><circle cx="7.5" cy="18" r="1.3"/><circle cx="16.5" cy="18" r="1.3"/></svg>Frota</div></div>
+      <div class="g-item"><div class="g-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 9h8M8 13h5"/></svg>Bancada</div></div>
+      <div class="g-item"><div class="g-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 12h16M8 6l-4 6 4 6M16 6l4 6-4 6"/></svg>Detalhes</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-strip reveal">
+  <div class="container">
+    <h2>Pronto para extrair o máximo do seu carro?</h2>
+    <a href="https://wa.me/553136940037?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20falar%20com%20a%20Hangar%20Racing." class="btn btn-dark">Agendar pelo WhatsApp</a>
+  </div>
+</section>
+
+<section class="location" id="contato">
+  <div class="container">
+    <div class="services-head reveal" style="margin-bottom:44px;">
+      <div class="eyebrow">Localização</div>
+      <h2>Venha até o Hangar</h2>
+    </div>
+
+    <div class="loc-grid reveal">
+      <div class="loc-map">
+        <iframe src="https://maps.google.com/maps?q=Av.+Canad%C3%A1,+444+-+Jardim+Canada,+Nova+Lima+-+MG,+34007-654&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa da Hangar Racing"></iframe>
+      </div>
+      <div class="loc-info">
+        <h3>Contato &amp; Endereço</h3>
+
+        <div class="loc-row">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.4"/></svg></span>
+          <p>Av. Canadá, 444 — Jardim Canadá, Nova Lima - MG, 34007-654</p>
+        </div>
+        <div class="loc-row">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h4l2 5-2.5 1.5a11 11 0 0 0 5 5L14 14l5 2v4a2 2 0 0 1-2 2A15 15 0 0 1 4 7a2 2 0 0 1 2-2z"/></svg></span>
+          <p><a href="https://wa.me/553136940037">(31) 3694-0037</a> — WhatsApp</p>
+        </div>
+
+        <table class="hours-table" id="hours-table">
+          <tr data-day="1"><td>Segunda-feira</td><td>08:00–18:00</td></tr>
+          <tr data-day="2"><td>Terça-feira</td><td>08:00–18:00</td></tr>
+          <tr data-day="3"><td>Quarta-feira</td><td>08:00–18:00</td></tr>
+          <tr data-day="4"><td>Quinta-feira</td><td>08:00–18:00</td></tr>
+          <tr data-day="5"><td>Sexta-feira</td><td>08:00–17:00</td></tr>
+          <tr data-day="6"><td>Sábado</td><td>Fechado</td></tr>
+          <tr data-day="0"><td>Domingo</td><td>Fechado</td></tr>
+        </table>
+
+        <div class="status-pill" id="status-pill"><span class="dot"></span><span id="status-text">Verificando horário…</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div class="foot-col">
+        <div class="foot-logo"><img src="logo_hangar.jpg" alt="Hangar Racing">HANGAR<span>RACING</span></div>
+        <p>Reprogramação e performance automotiva para veículos premium e esportivos, com dinamômetro Servitec e Oficina Full Service.</p>
+        <div class="foot-social">
+          <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="3.6"/><circle cx="17.2" cy="6.8" r="1"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M14 21v-7h2.5l.5-3H14V9c0-.9.3-1.5 1.7-1.5H17V5c-.3 0-1.3-.1-2.4-.1-2.4 0-4 1.5-4 4.1V11H8v3h2.6v7z"/></svg></a>
+          <a href="https://wa.me/553136940037" aria-label="WhatsApp"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12.02 3C7.6 3 4 6.6 4 11c0 1.5.4 2.9 1.1 4.1L4 21l6.1-1.1c1.2.6 2.5 1 3.9 1 4.4 0 8-3.6 8-8s-3.6-8-8-8z"/><path d="M9 10c0 3 2 5 5 5"/></svg></a>
+        </div>
+      </div>
+      <div class="foot-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#top">Início</a></li>
+          <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#servicos">Serviços</a></li>
+          <li><a href="#contato">Contato</a></li>
+        </ul>
+      </div>
+      <div class="foot-col">
+        <h4>Contato</h4>
+        <ul>
+          <li><a href="https://wa.me/553136940037">(31) 3694-0037</a></li>
+          <li>Av. Canadá, 444 — Jardim Canadá</li>
+          <li>Nova Lima - MG, 34007-654</li>
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© <span id="year"></span> Hangar Racing. Todos os direitos reservados.</span>
+      <span>Performance • Precisão • Cuidado</span>
+    </div>
+  </div>
+</footer>
+
+<a class="wa-float" href="https://wa.me/553136940037?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20falar%20com%20a%20Hangar%20Racing." aria-label="Fale conosco no WhatsApp" target="_blank" rel="noopener">
+  <svg viewBox="0 0 32 32" fill="currentColor"><path d="M16.02 3C9.4 3 4 8.38 4 15c0 2.36.66 4.56 1.8 6.44L4 29l7.74-1.75A11.9 11.9 0 0 0 16.02 27C22.65 27 28 21.62 28 15S22.65 3 16.02 3zm0 21.8c-2 0-3.87-.58-5.44-1.58l-.39-.24-4.6 1.04 1.02-4.5-.26-.4A9.7 9.7 0 0 1 6.2 15c0-5.4 4.4-9.8 9.82-9.8 5.42 0 9.82 4.4 9.82 9.8 0 5.4-4.4 9.8-9.82 9.8zm5.4-7.34c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.24-.46-2.36-1.47-.87-.78-1.46-1.74-1.63-2.04-.17-.3-.02-.46.13-.6.13-.14.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.02-1.04 2.5s1.06 2.9 1.21 3.1c.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.7.62.71.23 1.36.2 1.87.12.57-.08 1.76-.72 2-1.42.25-.7.25-1.3.17-1.42-.07-.13-.27-.2-.57-.35z"/></svg>
+</a>
+
+<script>
+(function(){
+  "use strict";
+
+  // Ano no rodapé
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Header: sombra/estado ao rolar
+  var header = document.getElementById('site-header');
+  function onScroll(){
+    if(window.scrollY > 30){ header.classList.add('scrolled'); }
+    else { header.classList.remove('scrolled'); }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  // Menu mobile
+  var burger = document.getElementById('burger');
+  var nav = document.getElementById('primary-nav');
+  burger.addEventListener('click', function(){
+    var open = nav.classList.toggle('open');
+    burger.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  nav.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', function(){
+      nav.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+    });
+  });
+
+  // Reveal on scroll (fade-in)
+  var revealEls = document.querySelectorAll('.reveal, .reveal-stagger');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:.15, rootMargin:'0px 0px -40px 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in'); });
+  }
+
+  // Animação do dyno ao carregar o hero
+  var hero = document.querySelector('.hero');
+  window.requestAnimationFrame(function(){
+    setTimeout(function(){ hero.classList.add('loaded'); }, 300);
+  });
+
+  // Horário de funcionamento: destaca o dia atual e mostra status aberto/fechado
+  var hoursMap = {
+    1:{open:8,  close:18}, 2:{open:8, close:18}, 3:{open:8, close:18},
+    4:{open:8,  close:18}, 5:{open:8, close:17},
+    6:null, 0:null
+  };
+  var now = new Date();
+  var day = now.getDay();
+  var hour = now.getHours() + now.getMinutes()/60;
+  var row = document.querySelector('.hours-table tr[data-day="'+day+'"]');
+  if(row){ row.classList.add('today'); }
+
+  var pill = document.getElementById('status-pill');
+  var statusText = document.getElementById('status-text');
+  var todayHours = hoursMap[day];
+  var isOpen = todayHours && hour >= todayHours.open && hour < todayHours.close;
+
+  if(isOpen){
+    statusText.textContent = 'Aberto agora — fecha às ' + String(todayHours.close).padStart(2,'0') + ':00';
+  } else {
+    pill.classList.add('closed');
+    statusText.textContent = 'Fechado no momento';
+  }
+})();
+</script>
+</body>
+</html>
